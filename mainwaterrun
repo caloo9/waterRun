@@ -12,7 +12,7 @@ import com.jme3.scene.shape.Box;
  * Move your Logic into AppStates or Controls or other java classes
  */
 public class WaterRun extends SimpleApplication {
-
+//HLEP
     public static void main(String[] args) {
         WaterRun app = new WaterRun();
         app.setShowSettings(false); //Settings dialog not supported on mac
@@ -35,7 +35,7 @@ public class WaterRun extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         //this method will be called every game tick and can be used to make updates
     }
-
+//HELP2
     @Override
     public void simpleRender(RenderManager rm) {
         //add render code here (if any)
