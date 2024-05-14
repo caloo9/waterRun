@@ -36,6 +36,11 @@ public class WaterRun extends SimpleApplication {
         //this method will be called every game tick and can be used to make updates
     }
 
+    public void printHelp()
+    {
+        System.out.print("Hello");
+    }
+
     @Override
     public void simpleRender(RenderManager rm) {
         //add render code here (if any)
