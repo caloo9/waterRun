@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class WaterRunMain extends ApplicationAdapter {
 	SpriteBatch batch;
     Player player;
     Texture background;
-    ArrayList<Platform> platforms;
+    PlatformGenerator platformGenerator;
+    OrthographicCamera camera;
 
     @Override
     public void create() {
@@ -22,9 +24,10 @@ public class WaterRunMain extends ApplicationAdapter {
         player = new Player(100, 300);
         background = new Texture("background.png");
         
-        platforms = new ArrayList<>();
-        platforms.add(new Platform(100, 100, 200, 20));
-        platforms.add(new Platform(400, 200, 200, 20));
+        platformGenerator = new PlatformGenerator(player);
+        
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -32,18 +35,20 @@ public class WaterRunMain extends ApplicationAdapter {
         player.handleInput();
         player.update();
 
-        for (Platform platform : platforms) {
-            player.checkPlatformCollision(platform);
-        }
+        // Update camera position to follow the player
+        camera.position.x = player.getX() + Gdx.graphics.getWidth() / 4; // Adjust as needed
+        camera.update();
+        
+        platformGenerator.update();
+        platformGenerator.checkCollisions(player);
         
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(background, camera.position.x - camera.viewportWidth / 2, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         player.render(batch);
-        for (Platform platform : platforms) {
-            platform.render(batch);
-        }
+        platformGenerator.render(batch);
         batch.end();
     }
 
@@ -52,8 +57,6 @@ public class WaterRunMain extends ApplicationAdapter {
         batch.dispose();
         background.dispose();
         player.dispose();
-        for (Platform platform : platforms) {
-            platform.dispose();
-        }
+        platformGenerator.dispose();
     }
 }
