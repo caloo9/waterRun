@@ -8,7 +8,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player {
-	private Texture texture;
+	private Texture stillTexture;
+	private Texture runRightTexture;
+	private Texture runLeftTexture;
+	private Texture currentTexture;
     private float x, y;
     private float velocityX, velocityY;
     private float gravity = -0.5f;
@@ -21,30 +24,40 @@ public class Player {
     private static final float ACCELERATION = 0.5f; // Rate of acceleration
     private static final float DECELERATION = 0.3f; // Rate of deceleration
     private static final float FRICTION = 0.1f; // Friction to stop the player gradually
-    private Vector2 playerPosition = new Vector2(); // Player's position
+    private Vector2 playerPosition = new Vector2();
+    
     public Player(float x, float y) {
         this.x = x;
         this.y = y;
-        texture = new Texture("WaterSprite.png");
+        stillTexture = new Texture("waterSpriteStill.png");
+        runRightTexture = new Texture("waterSpriteRunRight.png");
+        runLeftTexture = new Texture("waterSpriteRunLeft.png");
+        currentTexture = stillTexture;
         isOnGround = true;
         isOnPlatform = false;
-        bounds = new Rectangle(x, y, texture.getWidth(), texture.getHeight());
+        bounds = new Rectangle(x, y, stillTexture.getWidth(), stillTexture.getHeight());
+        isOnGround = true;
+        isOnPlatform = false;
     }
 
     public void handleInput() {
-        // Check if the left or right keys are pressed and adjust velocity accordingly
+        boolean isMoving = false;
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             if (velocityX > -MAX_SPEED) {
                 velocityX -= ACCELERATION;
             } else {
                 velocityX = -MAX_SPEED;
             }
+            currentTexture = runLeftTexture;
+            isMoving = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             if (velocityX < MAX_SPEED) {
                 velocityX += ACCELERATION;
             } else {
                 velocityX = MAX_SPEED;
             }
+            currentTexture = runRightTexture;
+            isMoving = true;
         } else {
             // Apply friction to slow down the player gradually when no keys are pressed
             if (velocityX > 0) {
@@ -64,8 +77,8 @@ public class Player {
         x += velocityX;
 
         // Jumping logic
-        if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && isOnGround) ||
-            (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isOnPlatform)) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.UP) && isOnGround) ||
+            (Gdx.input.isKeyJustPressed(Input.Keys.UP) && isOnPlatform)) {
             velocityY = JUMP_SPEED;
             isOnGround = false;
             isOnPlatform = false;
@@ -79,7 +92,14 @@ public class Player {
         // Update the player's position
         playerPosition.x += velocityX;
         playerPosition.y += velocityY;
-    }
+        
+        if (!isMoving)
+        {
+        	currentTexture = stillTexture;
+        }
+        
+        bounds.setPosition(x,y);
+}
 
     public void update() {
         x += velocityX;
@@ -95,12 +115,16 @@ public class Player {
         bounds.setPosition(x, y);
     }
 
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y);
+    public void render(SpriteBatch batch, float scale) {
+        batch.draw(currentTexture, x, y, currentTexture.getWidth()*scale, currentTexture.getHeight()*scale);
+        bounds.setSize(currentTexture.getWidth()*scale, currentTexture.getHeight()*scale);
     }
 
+    
     public void dispose() {
-        texture.dispose();
+    	 stillTexture.dispose();
+         runRightTexture.dispose();
+         runLeftTexture.dispose();
     }
 
     public Rectangle getBounds() {
@@ -111,6 +135,10 @@ public class Player {
         return x;
     }
 
+    public float getY() {
+        return y;
+    }
+    
     public void checkPlatformCollision(Platform platform) {
     	Rectangle platformBounds = platform.getBounds();
 
@@ -136,6 +164,7 @@ public class Player {
                 velocityX = 0;
             }
         }
+
         bounds.setPosition(x, y);
     }
 }
