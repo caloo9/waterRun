@@ -32,4 +32,13 @@ public class Platform {
     {
     	return x;
     }
+    
+    public float getY()
+    {
+    	return y;
+    }
+
+	public float getHeight() {
+		return bounds.getHeight();
+	}
 }
