@@ -1,6 +1,7 @@
 package com.mygdx.waterrun;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
@@ -77,4 +78,12 @@ public class PlatformGenerator {
             platform.dispose();
         }
     }
+
+	public Platform getCurrentPlatform() {
+		if (platforms.size() > 0) {
+            return platforms.get(0);
+        } else {
+            return null; // No platforms generated yet
+        }
+	}
 }
