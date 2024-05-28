@@ -39,7 +39,7 @@ public class GameOverScreen extends WaterRunScreens{
 
 		time += delta;
 		if (time > 1) {
-			if (Gdx.input.isKeyPressed(Keys.ANY_KEY) || Gdx.input.justTouched()) {
+			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 				game.setScreen(new MainMenu(game));
 			}
 		}
