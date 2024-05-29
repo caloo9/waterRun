@@ -3,6 +3,7 @@ package com.mygdx.waterrun;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.mygdx.waterrun.screens.IntroScreen;
 import com.mygdx.waterrun.screens.GameScreen;
 import com.mygdx.waterrun.screens.MainMenu;
@@ -14,6 +15,7 @@ public class WaterRunMain extends ApplicationAdapter {
 	private GameOverScreen gameover;
 	private MainMenu menu;
 	private Screen screen;
+	private Music bgMusic;
     
     @Override
     public void create() {
@@ -21,6 +23,11 @@ public class WaterRunMain extends ApplicationAdapter {
         gameover = new GameOverScreen(this);
         intro = new IntroScreen(this);
         menu = new MainMenu(this);
+        
+        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
+        bgMusic.setLooping(true);
+        bgMusic.play();
+
         
         setScreen(intro);
     }
@@ -61,5 +68,8 @@ public class WaterRunMain extends ApplicationAdapter {
         {
         	menu.dispose();
         }
+        if (bgMusic != null)
+        {
+        	bgMusic.dispose();
+        }
     }
-}
