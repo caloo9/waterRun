@@ -1,5 +1,8 @@
 package com.mygdx.waterrun;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,6 +21,12 @@ public class Player {
     private Rectangle bounds;
     private boolean isOnGround;
     private boolean isOnPlatform;
+    private int score = 0; // Score variable
+    private boolean landedOnNewPlatform = false;
+    private Platform currentPlatform = null; // Track current platform
+    private Set<Platform> landedPlatforms; // Track landed platforms
+    
+    
     private static final float JUMP_SPEED = 18.0f; // Initial jump velocity
     private static final float GRAVITY = -0.5f; // Gravity affecting the player
     private static final float MAX_SPEED = 5.0f; // Maximum speed
@@ -38,6 +47,7 @@ public class Player {
         bounds = new Rectangle(x, y, stillTexture.getWidth(), stillTexture.getHeight());
         isOnGround = true;
         isOnPlatform = false;
+        landedPlatforms = new HashSet<>(); // Initialize the set here
     }
 
     public void handleInput() {
@@ -150,6 +160,12 @@ public class Player {
                 velocityY = 0;
                 isOnGround = true;
                 isOnPlatform = true;
+                
+             // Increment score if landing on a new platform
+                if (landedPlatforms.add(platform)) {
+                    score++;
+                }
+                
             } else if (y + bounds.height < platformBounds.y) {
                 // If the player is below the platform and jumping into it
                 y = platformBounds.y - bounds.height;
@@ -162,9 +178,13 @@ public class Player {
                 // If the player is to the right of the platform
                 x = platformBounds.x + platformBounds.width;
                 velocityX = 0;
-            }
+            } 
+            bounds.setPosition(x, y);
         }
-
-        bounds.setPosition(x, y);
+    }
+    
+    public int getScore()
+    {
+    	return score;
     }
 }
