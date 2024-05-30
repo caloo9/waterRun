@@ -16,6 +16,9 @@ public class GameOverScreen extends WaterRunScreens{
 	SpriteBatch batch;
 	float time = 0;
 	OrthographicCamera camera;
+	BitmapFont font;
+	int finalScore;
+	Player player;
 
 	public GameOverScreen (WaterRunMain game) {
 		super(game);
