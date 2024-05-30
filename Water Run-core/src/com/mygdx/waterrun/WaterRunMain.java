@@ -20,7 +20,7 @@ public class WaterRunMain extends ApplicationAdapter {
     @Override
     public void create() {
     	game = new GameScreen(this);
-        gameover = new GameOverScreen(this);
+        gameover = new GameOverScreen(this, 0);
         intro = new IntroScreen(this);
         menu = new MainMenu(this);
         
@@ -73,3 +73,4 @@ public class WaterRunMain extends ApplicationAdapter {
         	bgMusic.dispose();
         }
     }
+}
