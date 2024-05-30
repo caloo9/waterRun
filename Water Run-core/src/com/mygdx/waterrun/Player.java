@@ -187,4 +187,9 @@ public class Player {
     {
     	return score;
     }
+    
+    public void resetScore()
+    {
+    	this.score = 0;
+    }
 }
