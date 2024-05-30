@@ -6,8 +6,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.mygdx.waterrun.Player;
 import com.mygdx.waterrun.WaterRunMain;
 
 public class GameOverScreen extends WaterRunScreens{
@@ -20,8 +23,9 @@ public class GameOverScreen extends WaterRunScreens{
 	int finalScore;
 	Player player;
 
-	public GameOverScreen (WaterRunMain game) {
+	public GameOverScreen (WaterRunMain game, int finalScore) {
 		super(game);
+		this.finalScore = finalScore;
 	}
 
 	@Override
@@ -30,13 +34,14 @@ public class GameOverScreen extends WaterRunScreens{
 		over = new TextureRegion(overTexture);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
-        	camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
-        	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Water-Regular.otf")); 
-        	FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        	parameter.size = 62;
-        	font = generator.generateFont(parameter);
-        	generator.dispose(); // Dispose to avoid memory leaks
+        
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Water-Regular.otf")); 
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 62;
+        font = generator.generateFont(parameter);
+        generator.dispose(); // Dispose to avoid memory leaks
 	}
 
 	@Override
@@ -44,7 +49,7 @@ public class GameOverScreen extends WaterRunScreens{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		batch.draw(over, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		batch.end();
+		
 
 		// Draw the score
 		String scoreText = "Final Score: " + finalScore;
@@ -52,24 +57,9 @@ public class GameOverScreen extends WaterRunScreens{
         float x = (Gdx.graphics.getWidth()) / 2 - 170;
         float y = Gdx.graphics.getHeight() / 2 - 250;
         
-        if (finalScore > 9)
-        {
         font.draw(batch, scoreText, x, y);
-        }
-        else if (finalScore > 99)
-        {
-        	font.draw(batch, scoreText, x-200, y);
-        }
-        else if (finalScore > 999)
-        {
-        	font.draw(batch, scoreText, x-230, y);
-        }
-        else if(finalScore > 9999)
-        {
-        	font.draw(batch, scoreText, x-260, y);
-        }
-		batch.end();
-		
+
+        batch.end();
 		time += delta;
 		if (time > 1) {
 			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
