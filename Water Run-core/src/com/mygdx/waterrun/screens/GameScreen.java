@@ -53,8 +53,8 @@ public class GameScreen extends WaterRunScreens{
 		player.handleInput();
         player.update();
 
-        if (player.getY() <= 0) { // Example condition
-            game.gameOver();
+        if (player.getY() <= 0) {
+            game.setScreen(new GameOverScreen(game, player.getScore()));
             return;
         }
         
